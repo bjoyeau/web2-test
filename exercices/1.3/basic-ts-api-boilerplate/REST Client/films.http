@@ -1,0 +1,27 @@
+######### NORMAL OPERATION  ###########
+@baseUrl = http://localhost:3000
+
+### Read all films
+GET {{baseUrl}}/films
+
+### Read all films with this minimum duration
+GET {{baseUrl}}/films?minimum-duration=160
+
+### Read the film identified by an id in the menu
+GET  {{baseUrl}}/films/2
+
+
+### Create a drink
+POST {{baseUrl}}/films
+Content-Type: application/json
+
+{
+    "title":"Harry Potter",
+    "director" : "J K Rowling",
+    "duration" : 60,
+    "budget" : 250,
+    "imageUrl":"https://upload.wikimedia.org/wikipedia/commons/6/6e/Harry_Potter_wordmark.svg" 
+}
+
+
+
