@@ -1,3 +1,6 @@
+
+// CODE QUE J'AI GENERE VIA CHATGPT !!!
+
 import Header from '../Header';
 import UserCard from '../UserCard';
 import Footer from '../Footer';
