@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import RandomDog from "../Dogs/RandomDog";
 
 const App = () => {
   const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      setRefresh(!refresh);
+    }, 5000);
+    
+    return () => clearInterval(interval); 
+  }, [refresh]);
 
   return (
     <>
@@ -16,13 +25,6 @@ const App = () => {
           <RandomDog key={`${refresh}3`} />
         </div>
 
-        <div>
-
-          <button onClick={() => setRefresh(!refresh)}>
-            Refresh
-          </button>
-
-        </div>
       </div>
     </>
   );
