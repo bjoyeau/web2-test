@@ -20,7 +20,7 @@ const App = () => {
       .then((joke) => setJoke({category: joke.category, joke: joke.joke}));
       // Fin du code original
       
-    }, 1000);
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
