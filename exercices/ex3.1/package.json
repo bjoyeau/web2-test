@@ -1,7 +1,6 @@
 {
-  "name": "jwt-ts-api-boilerplate",
+  "name": "ex3.1",
   "version": "1.0.0",
-  "author": "e-Baron",
   "private": true,
   "scripts": {
     "tsc": "tsc",

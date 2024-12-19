@@ -39,6 +39,7 @@ router.post("/register", async (req, res) => {
 
 /* Login a user */
 router.post("/login", async (req, res) => {
+  console.log("passage dans la route login");
   const body: unknown = req.body;
   if (
     !body ||
