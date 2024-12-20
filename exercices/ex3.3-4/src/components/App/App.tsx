@@ -4,12 +4,23 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import NavBar from "../Navbar/Navbar";
 import { useEffect, useState } from "react";
-import { Movie, MovieContext, NewMovie } from "../../types";
+import { AuthenticatedUser, MaybeAuthenticatedUser, Movie, MovieContext, NewMovie, User } from "../../types";
 import { addMovie, fetchMovies, deleteMovie } from "../../utils/film-service";
+import { clearAuthenticatedUser, getAuthenticatedUser, storeAuthenticatedUser } from "../../utils/session";
 
 const App = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const navigate = useNavigate();
+  const [authenticatedUser, setAuthenticatedUser] =
+    useState<MaybeAuthenticatedUser>(undefined);
+
+  useEffect(() => {
+    initMovies();
+    const authenticatedUser = getAuthenticatedUser();
+    if (authenticatedUser) {
+      setAuthenticatedUser(authenticatedUser);
+    }
+  }, []);
 
   const initMovies = async () => {
     try {
@@ -19,10 +30,6 @@ const App = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    initMovies();
-  }, []);
 
   const onMovieAdded = async (newMovie: NewMovie) => {
     console.log("Movie to add:", newMovie);
@@ -48,17 +55,80 @@ const App = () => {
     }
   };
 
+  const registerUser = async (newUser: User) => {
+    try {
+      const options = {
+        method: "POST",
+        body: JSON.stringify(newUser),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await fetch("/api/auths/register", options);
+
+      if (!response.ok)
+        throw new Error(
+          `fetch error : ${response.status} : ${response.statusText}`
+        );
+
+      const createdUser: AuthenticatedUser = await response.json();
+
+      setAuthenticatedUser(createdUser);
+      storeAuthenticatedUser(createdUser);
+      console.log("createdUser: ", createdUser);
+    } catch (err) {
+      console.error("registerUser::error: ", err);
+      throw err;
+    }
+  }
+
+  const loginUser = async (user: User) => {
+    try {
+      const options = {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await fetch("/api/auths/login", options);
+
+      if (!response.ok)
+        throw new Error(
+          `fetch error : ${response.status} : ${response.statusText}`
+        );
+
+      const authenticatedUser: AuthenticatedUser = await response.json();
+      console.log("authenticatedUser: ", authenticatedUser);
+
+      setAuthenticatedUser(authenticatedUser);
+      storeAuthenticatedUser(authenticatedUser);
+    } catch (err) {
+      console.error("loginUser::error: ", err);
+      throw err;
+    }
+  };
+
+  const clearUser = () => {
+    clearAuthenticatedUser();
+    setAuthenticatedUser(undefined);
+  }
+
   const movieContext: MovieContext = {
     movies,
     onMovieAdded,
-    onMovieDeleted
+    onMovieDeleted,
+    registerUser,
+    loginUser,
   };
 
   return (
     <div>
       <Header urlLogo="https://media.istockphoto.com/id/1429764305/fr/vectoriel/bande-de-film-vierge-isol%C3%A9e-sur-le-fond-blanc.jpg?s=1024x1024&w=is&k=20&c=is5Y6cun0NC8PxJd51p4YnUoLUpyb758Bdigh4Bqn48=">
         <h1>Tous sur les films</h1>
-        <NavBar />
+        <NavBar authenticatedUser={authenticatedUser} clearUser={clearUser}  />
       </Header>
 
       <main className="page-content">
