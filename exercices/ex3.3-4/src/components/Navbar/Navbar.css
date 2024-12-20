@@ -1,0 +1,12 @@
+.navbar {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar a {
+  padding-left: 10px;
+  padding-right: 10px;
+}

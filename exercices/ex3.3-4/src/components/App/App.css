@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.page-content {
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 1rem;
+  
+}
